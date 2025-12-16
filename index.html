@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Noche de Reyes – Apadrina un Sueño</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Tipografías cálidas -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --oro: #facc15;
+      --oro-suave: #fef3c7;
+      --azul-noche: #020617;
+      --azul-profundo: #0f172a;
+      --azul-resalte: #1d4ed8;
+      --verde: #22c55e;
+      --rojo: #ef4444;
+      --texto-principal: #f9fafb;
+      --texto-suave: #e5e7eb;
+      --glass: rgba(15, 23, 42, 0.82);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Quicksand", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--texto-principal);
+      background:
+        radial-gradient(circle at 10% -10%, rgba(239, 246, 255, 0.16), transparent 55%),
+        radial-gradient(circle at 90% -10%, rgba(254, 249, 195, 0.16), transparent 55%),
+        linear-gradient(to bottom, #020617, #0b1120 35%, #030712 100%);
+      padding: 14px;
+      display: flex;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Cielo con estrellas suaves */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.24) 0, transparent 45%),
+        radial-gradient(circle at 75% 10%, rgba(255, 255, 255, 0.18) 0, transparent 50%),
+        radial-gradient(circle at 10% 80%, rgba(255, 255, 255, 0.16) 0, transparent 55%);
+      opacity: 0.18;
+      mix-blend-mode: screen;
+      z-index: 0;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 620px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 14px;
+      animation: fadeDown 0.8s ease-out;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .crown {
+      font-size: 2.6rem;
+      margin-bottom: 6px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    h1 {
+      font-family: "Pacifico", cursive;
+      font-size: 1.7rem;
+      margin: 0 0 4px;
+      background: linear-gradient(45deg, #facc15, #fef3c7, #facc15);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 18px rgba(250, 204, 21, 0.55);
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--texto-suave);
+      margin: 0 0 8px;
+    }
+
+    .badge-reyes {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(250, 250, 250, 0.18);
+      background: radial-gradient(circle at 0 0, rgba(250, 204, 21, 0.2), transparent 55%),
+                  radial-gradient(circle at 100% 0, rgba(96, 165, 250, 0.18), transparent 55%),
+                  rgba(15, 23, 42, 0.9);
+      font-size: 0.75rem;
+      margin-bottom: 4px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--verde);
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.7; }
+    }
+
+    .info {
+      background: var(--glass);
+      border-radius: 16px;
+      padding: 10px 11px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      font-size: 0.8rem;
+      color: var(--texto-suave);
+      margin-bottom: 12px;
+      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.9);
+    }
+
+    .info strong {
+      color: var(--oro-suave);
+    }
+
+    .top-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    @media (min-width: 480px) {
+      .top-bar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .counter {
+      font-size: 0.8rem;
+      padding: 5px 9px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: radial-gradient(circle at 0 0, rgba(250, 204, 21, 0.28), transparent 55%),
+                  rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(250, 250, 250, 0.2);
+    }
+
+    .counter span {
+      font-weight: 600;
+      color: var(--oro-suave);
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    select {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--texto-suave);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      font-family: inherit;
+    }
+
+    .btn-reset {
+      margin-top: 2px;
+      font-size: 0.75rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 250, 252, 0.35);
+      background: transparent;
+      color: var(--texto-suave);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.18s ease;
+    }
+
+    .btn-reset:hover {
+      background: rgba(248, 250, 252, 0.08);
+      color: var(--oro-suave);
+      border-color: var(--oro-suave);
+    }
+
+    /* Secciones temáticas */
+    .theme-section {
+      margin-bottom: 18px;
+    }
+
+    .theme-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .theme-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .theme-title span.icon {
+      font-size: 1.1rem;
+    }
+
+    .theme-subtitle {
+      font-size: 0.78rem;
+      color: var(--texto-suave);
+      margin-bottom: 6px;
+    }
+
+    .theme-toggle {
+      font-size: 0.72rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--texto-suave);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cards.collapsed > :nth-child(n+4) {
+      display: none;
+    }
+
+    .theme-footer {
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .btn-more {
+      font-size: 0.74rem;
+      background: transparent;
+      color: var(--oro-suave);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0;
+    }
+
+    /* Tarjetas */
+    .card {
+      position: relative;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.86));
+      border-radius: 18px;
+      padding: 10px 10px 9px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.12s ease, border-color 0.12s ease, opacity 0.12s ease;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(250, 204, 21, 0.25), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(96, 165, 250, 0.22), transparent 55%);
+      opacity: 0.65;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
+      border-color: rgba(250, 204, 21, 0.8);
+    }
+
+    .card.elegido {
+      opacity: 0.46;
+      cursor: default;
+      border-color: rgba(148, 163, 184, 0.9);
+    }
+
+    .card.elegido:hover {
+      transform: none;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7);
+    }
+
+    .row-1 {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .name-age {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .name {
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    .age-pill {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.9);
+      color: #e0f2fe;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .theme-tag {
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 250, 252, 0.18);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--texto-suave);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .wish {
+      font-size: 0.8rem;
+      margin: 4px 0 2px;
+    }
+
+    .wish span {
+      color: var(--oro-suave);
+      font-weight: 600;
+    }
+
+    .story {
+      font-size: 0.78rem;
+      color: var(--texto-suave);
+      margin: 0;
+      line-height: 1.4;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 10px;
+      padding: 6px 8px;
+      border-left: 2px solid rgba(250, 204, 21, 0.8);
+    }
+
+    .status {
+      margin-top: 5px;
+      font-size: 0.73rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .status.disponible {
+      background: rgba(22, 163, 74, 0.14);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.75);
+    }
+
+    .status.elegido {
+      background: rgba(148, 163, 184, 0.16);
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.85);
+    }
+
+    .foot {
+      font-size: 0.72rem;
+      color: var(--texto-suave);
+      text-align: center;
+      margin-top: 14px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="crown">👑</div>
+      <div class="badge-reyes">
+        <span class="badge-dot"></span>
+        <span>Noche de Reyes · Ningún niño se queda sin padrino</span>
+      </div>
+      <h1>Apadrina un sueño</h1>
+      <p class="subtitle">
+        Elige una carta y apadrina a una niña o un niño para hacer realidad su deseo en esta Noche de Reyes.
+      </p>
+    </header>
+
+    <div class="info">
+      💫 <strong>¿Cómo funciona?</strong> Desliza las secciones temáticas y toca la tarjeta que te conecte. 
+      Al confirmar, esa niña o niño se marcará como <strong>ya apadrinado</strong> en este dispositivo. 
+      Usa un solo celular o tablet para administrar la lista durante la colecta.
+    </div>
+
+    <div class="top-bar">
+      <div class="counter" id="counterText">
+        <span>Disponibles:</span> <span>0 / 0</span>
+      </div>
+      <div class="filters">
+        <select id="filterSelect">
+          <option value="todos">Ver todos los estados</option>
+          <option value="disponibles">Solo disponibles</option>
+          <option value="apadrinados">Solo apadrinados</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-reset" id="resetBtn">
+      🔄 Reiniciar elecciones y dejar todas las cartas disponibles
+    </button>
+
+    <!-- Secciones temáticas -->
+    <section id="themesContainer"></section>
+
+    <p class="foot">
+      Puedes editar la lista en el arreglo <strong>ninos</strong> del script. 
+      El estado se guarda en <strong>este dispositivo</strong> para la jornada de la colecta.
+    </p>
+  </div>
+
+  <script>
+    // ==============================
+    // 1. LISTA DE NIÑAS Y NIÑOS
+    // ==============================
+    // Cada registro: id, nombre, edad, peticion, tema
+    // Temas posibles: 'box', 'futbol', 'peluches', 'ropa', 'otros'
+    const ninos = [
+      // Box, guantes, costal, botas
+      { id: 1, nombre: "Nohemí Piña", edad: 14, peticion: "Sudadera talla 14, conjunto de ropa deportiva, guantes de boxeo", tema: "box" },
+      { id: 2, nombre: "Andrea Hernández", edad: 15, peticion: "Sudadera de Hello Kittie, peluche de Hello Kittie, guantes de boxeo", tema: "box" },
+      { id: 3, nombre: "Eiden Muñoz", edad: 15, peticion: "Guantes de boxeo, conjunto de pans negro, figuras de Gokú", tema: "box" },
+      { id: 4, nombre: "Marcos Dominguez", edad: 13, peticion: "Costal de boxeo con guantes, tenis número 24.5", tema: "box" },
+      { id: 5, nombre: "Saraí Guadalupe", edad: 14, peticion: "Libro 'rosas y champagne' o 'pasión', o guantes de boxeo, carritos Hot Wheels", tema: "box" },
+      { id: 6, nombre: "Daniel Díaz", edad: 15, peticion: "Guantes de boxeo, chamarra de Goku talla G", tema: "box" },
+      { id: 7, nombre: "Joshua Alonso", edad: 15, peticion: "Guantes de boxeo, bicicleta, tenis 25.5", tema: "box" },
+      { id: 8, nombre: "Perla", edad: 14, peticion: "Conjunto de pans azul y tenis blancos, guantes de boxeo", tema: "box" },
+      { id: 9, nombre: "Jorge Hilarón", edad: 15, peticion: "Conjunto de short y playera de Pumas, chaleco o gorra de Pumas, guantes de boxeo", tema: "box" },
+      { id: 10, nombre: "Gael García", edad: 14, peticion: "Botas de boxeo número 4, guantes de boxeo y/o costal", tema: "box" },
+      { id: 11, nombre: "Jesús Toledo", edad: 11, peticion: "Guantes de boxeo con vendas", tema: "box" },
+      { id: 12, nombre: "Aron Tellez", edad: 14, peticion: "Balón de futbol, guantes de boxeo, pans para hacer ejercicio talla 32", tema: "box" },
+      { id: 13, nombre: "Jeremy López", edad: 14, peticion: "Balón de futbol, guantes de boxeo, mochila escolar", tema: "box" },
+
+      // Futbol, portero, playeras de equipo, balón
+      { id: 14, nombre: "Miguel Ángel Hernandez", edad: 12, peticion: "Pijama del América, balón de futbol", tema: "futbol" },
+      { id: 15, nombre: "Víctor Nochebuena", edad: 11, peticion: "Bicicleta, balón de futbol, tenis talla 22", tema: "futbol" },
+      { id: 16, nombre: "Rogelio Ruiz", edad: 9, peticion: "Balón de futbol, conjunto de portero talla 9, guantes de portero", tema: "futbol" },
+      { id: 17, nombre: "Valery Briseño", edad: 8, peticion: "Conjunto de pans talla 8, balón, bicicleta", tema: "futbol" },
+      { id: 18, nombre: "Jonathan Briseño", edad: 11, peticion: "Conjunto de pans talla 10, balón, espinilleras para futbol", tema: "futbol" },
+      { id: 19, nombre: "Edwin Martíez", edad: 7, peticion: "Conjunto de pans talla 8, balón, tenis talla 19", tema: "futbol" },
+      { id: 20, nombre: "Matias Serrano", edad: 8, peticion: "Conjunto de pans talla 8, balón, espinilleras para futbol", tema: "futbol" },
+      { id: 21, nombre: "Daniel Hernández", edad: 8, peticion: "Conjunto de pans talla 8, balón, tenis talla 20", tema: "futbol" },
+      { id: 22, nombre: "Christopher Hernández", edad: 8, peticion: "Conjunto de pans talla 8, balón, tenis talla 20", tema: "futbol" },
+      { id: 23, nombre: "Natalia Limas", edad: 9, peticion: "Conjunto de pans talla 9, balón, playera del Cruz Azul talla 10", tema: "futbol" },
+      { id: 24, nombre: "Kevin Serrano", edad: 9, peticion: "Conjunto de pans talla 10, balón, playera del América talla 10", tema: "futbol" },
+      { id: 25, nombre: "Montserrat Cruz", edad: 9, peticion: "Conjunto de pans talla 10, balón, muñecas K-pop", tema: "futbol" },
+      { id: 26, nombre: "Emiliano Martínez", edad: 9, peticion: "Conjunto de pans de portero talla 9, balón, guantes de portero talla 7", tema: "futbol" },
+      { id: 27, nombre: "Eitan Escalante", edad: 8, peticion: "Conjunto de pans talla 8, balón", tema: "futbol" },
+      { id: 28, nombre: "Jesús Zarco", edad: 8, peticion: "Balón, guantes y conjunto de portero talla 8", tema: "futbol" },
+      { id: 29, nombre: "Sebastian Martínez", edad: 10, peticion: "Conjunto de pans talla 10, balón, playera del América talla 10", tema: "futbol" },
+      { id: 30, nombre: "Mia Ochoa", edad: 10, peticion: "Conjunto de pans talla 10, balón, tenis número 22", tema: "futbol" },
+      { id: 31, nombre: "Jorge Vargas", edad: 9, peticion: "Conjunto de pans talla 9, balón, playera del Barcelona", tema: "futbol" },
+      { id: 32, nombre: "Santiago Serrano", edad: 9, peticion: "Conjunto de pans talla 10, balón", tema: "futbol" },
+      { id: 33, nombre: "Alexis Alcantara", edad: 9, peticion: "Conjunto de pans talla 10, balón, playera del Real Madrid", tema: "futbol" },
+      { id: 34, nombre: "Mateo Reyes", edad: 10, peticion: "Conjunto de pans talla 10, balón, playera del América", tema: "futbol" },
+      { id: 35, nombre: "Yadiel Iker", edad: 10, peticion: "Conjunto de pans talla 10, balón, playera del América talla 10", tema: "futbol" },
+      { id: 36, nombre: "Ramses Hernández", edad: 9, peticion: "Conjunto de pans talla 9, balón, playera del América", tema: "futbol" },
+      { id: 37, nombre: "Erick Díaz", edad: 11, peticion: "Conjunto de pans de portero talla 12, balón, guantes de portero talla 8", tema: "futbol" },
+      { id: 38, nombre: "Osman Santiago", edad: 12, peticion: "Conjunto de pans talla 14, balón, playera de México", tema: "futbol" },
+      { id: 39, nombre: "Bruno Albino", edad: 12, peticion: "Conjunto de pans talla 14, balón, playera de México", tema: "futbol" },
+      { id: 40, nombre: "Melany López", edad: 14, peticion: "Conjunto de pans talla 14, balón, playera de México", tema: "futbol" },
+      { id: 41, nombre: "Guillermo Jimenez", edad: 11, peticion: "Conjunto de pans talla 11, balón, playera de México", tema: "futbol" },
+      { id: 42, nombre: "Diego Vega", edad: 14, peticion: "Conjunto de pans talla 14, balón, playera de México", tema: "futbol" },
+      { id: 43, nombre: "Jesús Ramírez", edad: 14, peticion: "Conjunto de pans talla 14, balón, playera de México", tema: "futbol" },
+      { id: 44, nombre: "Axel Melo", edad: 14, peticion: "Conjunto de pans talla 14, balón, playera de México", tema: "futbol" },
+
+      // Peluches, Hello Kitty, muñecas, K-pop
+      { id: 45, nombre: "Dana Layan", edad: 3, peticion: "Vestido de Hello Kittie, peluche, o ropa con zapatos", tema: "peluches" },
+      { id: 46, nombre: "Naomi", edad: 5, peticion: "Conjunto de pans y sudadera, pelucho o vestido con zapatos", tema: "peluches" },
+      { id: 47, nombre: "Tabata Muñoz", edad: 12, peticion: "Tenis talla 20, figuras de Karumi y Hello Kittie", tema: "peluches" },
+      { id: 48, nombre: "Hanna Hernández", edad: 13, peticion: "Balón de voleibol, peluche de Hello Kittie, tenis negros o azules 24.5", tema: "peluches" },
+      { id: 49, nombre: "Mabel Gonzalez", edad: 3, peticion: "Muñecas K-pop, burbujas, muñequita de Hello Kittie", tema: "peluches" },
+      { id: 50, nombre: "Frida Martínez", edad: 5, peticion: "Muñecas K-poo, ropa talla 6", tema: "peluches" },
+      { id: 51, nombre: "Montserrat Cruz", edad: 9, peticion: "Conjunto de pans talla 10, balón, muñecas K-pop", tema: "peluches" },
+
+      // Ropa deportiva / estilo sin foco fuerte en box/futbol
+      { id: 52, nombre: "Iris Díaz", edad: 13, peticion: "Tenis talla 24.5, chamarra talla 14", tema: "ropa" },
+      { id: 53, nombre: "Brittany Yamiliet", edad: 13, peticion: "Tenis talla 25.5, playeras, conjunto de pans talla 16", tema: "ropa" },
+      { id: 54, nombre: "Luis Pacheco", edad: 16, peticion: "Conjunto de pans y sudadera talla G (soy muy alto), tenis 7.5, gorra", tema: "ropa" },
+      { id: 55, nombre: "Dael Martínez", edad: 16, peticion: "Conjunto de pans y sudadera talla M, tenis #4", tema: "ropa" },
+      { id: 56, nombre: "Fernando Merino", edad: 13, peticion: "Balón, conjunto de pans y sudadera de las Chivas o playera de Chivas", tema: "ropa" },
+
+      // Otros / misceláneos
+      { id: 57, nombre: "Josué Gonzalez", edad: 6, peticion: "Carrito de control remoto, peluche de Roblox, ropa", tema: "otros" },
+      { id: 58, nombre: "Miguel Ángel Hernandez", edad: 12, peticion: "Pijama del América, balón de futbol", tema: "otros" }, // también futbol, pero lo dejamos mixto
+      // (siéntete libre de ajustar/añadir más según la hoja original)
+    ];
+
+    // ==============================
+    // 2. CONFIG LOCALSTORAGE
+    // ==============================
+    const STORAGE_KEY = "reyes-apadrinados-v1";
+    let apadrinados = new Set();
+
+    function cargarApadrinados() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        apadrinados = new Set(JSON.parse(raw));
+      } catch (e) {
+        console.error("Error leyendo localStorage", e);
+      }
+    }
+
+    function guardarApadrinados() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...apadrinados]));
+    }
+
+    // ==============================
+    // 3. AGRUPACIÓN POR TEMA
+    // ==============================
+    const temasInfo = {
+      box: {
+        icon: "🥊",
+        titulo: "Sueños de ring y guantes",
+        descripcion:
+          "Niñas y niños que sueñan con entrenar, ser más fuertes y subirse a un ring con su propio equipo de box."
+      },
+      futbol: {
+        icon: "⚽",
+        titulo: "Futbol, cancha y portería",
+        descripcion:
+          "Futuros campeones, porteros y fanáticos de sus equipos que sueñan con balones, uniformes y playeras."
+      },
+      peluches: {
+        icon: "🎀",
+        titulo: "Magia, peluches y personajes",
+        descripcion:
+          "Sueños suaves y coloridos: Hello Kitty, K-pop, peluches y detalles llenos de ternura."
+      },
+      ropa: {
+        icon: "👟",
+        titulo: "Ropa deportiva y estilo",
+        descripcion:
+          "Pants, sudaderas, tenis y prendas que los hacen sentir cómodos, seguros y con mucho estilo."
+      },
+      otros: {
+        icon: "✨",
+        titulo: "Libros, juegos y otros sueños",
+        descripcion:
+          "Deseos especiales que van desde libros y juguetes hasta detalles únicos para esta Noche de Reyes."
+      }
+    };
+
+    function agruparPorTema(lista) {
+      const grupos = {};
+      lista.forEach(n => {
+        if (!grupos[n.tema]) grupos[n.tema] = [];
+        grupos[n.tema].push(n);
+      });
+      return grupos;
+    }
+
+    // ==============================
+    // 4. RENDER DE TARJETAS
+    // ==============================
+    const themesContainer = document.getElementById("themesContainer");
+    const counterText = document.getElementById("counterText");
+    const filterSelect = document.getElementById("filterSelect");
+
+    function edadTexto(edad) {
+      return `${edad} año${edad === 1 ? "" : "s"}`;
+    }
+
+    function miniHistoria(nino) {
+      return `${nino.nombre} espera con ilusión la llegada de los Reyes Magos. Su mayor deseo este año es recibir ${nino.peticion.toLowerCase()}, un detalle que le recuerde que alguien pensó especialmente en su sonrisa.`;
+    }
+
+    function crearTarjeta(nino) {
+      const yaApadrinado = apadrinados.has(nino.id);
+      const card = document.createElement("article");
+      card.className = "card" + (yaApadrinado ? " elegido" : "");
+      card.dataset.id = nino.id;
+
+      const temaData = temasInfo[nino.tema] || temasInfo.otros;
+
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="row-1">
+            <div class="name-age">
+              <div class="name">${nino.nombre}</div>
+              <div class="age-pill">
+                <span>🎂</span>
+                <span>${edadTexto(nino.edad)}</span>
+              </div>
+            </div>
+            <div class="theme-tag">
+              <span>${temaData.icon}</span>
+              <span>${temaData.titulo.split(" ")[0]}</span>
+            </div>
+          </div>
+          <p class="wish">Sueña con recibir: <span>${nino.peticion}</span></p>
+          <p class="story">${miniHistoria(nino)}</p>
+          <div class="status ${yaApadrinado ? "elegido" : "disponible"}">
+            <span class="status-dot"></span>
+            <span>${yaApadrinado ? "✓ Ya fue apadrinado" : "✨ Disponible para apadrinar"}</span>
+          </div>
+        </div>
+      `;
+
+      if (!yaApadrinado) {
+        card.addEventListener("click", () => confirmarApadrinar(nino));
+      }
+
+      return card;
+    }
+
+    function actualizarContador() {
+      const total = ninos.length;
+      const usados = apadrinados.size;
+      const libres = total - usados;
+      counterText.innerHTML = `<span>Disponibles:</span> <span>${libres} / ${total}</span>`;
+    }
+
+    function render() {
+      const filtro = filterSelect.value;
+      themesContainer.innerHTML = "";
+      const grupos = agruparPorTema(ninos);
+
+      Object.keys(temasInfo).forEach(tema => {
+        const lista = grupos[tema] || [];
+        if (!lista.length) return;
+
+        const section = document.createElement("section");
+        section.className = "theme-section";
+
+        const header = document.createElement("div");
+        header.className = "theme-header";
+
+        const title = document.createElement("div");
+        title.className = "theme-title";
+        title.innerHTML = `<span class="icon">${temasInfo[tema].icon}</span><span>${temasInfo[tema].titulo}</span>`;
+
+        const toggle = document.createElement("button");
+        toggle.className = "theme-toggle";
+        toggle.type = "button";
+        toggle.textContent = "Ver menos";
+        toggle.addEventListener("click", () => toggleSeccion(section));
+
+        header.appendChild(title);
+        header.appendChild(toggle);
+
+        const subtitle = document.createElement("p");
+        subtitle.className = "theme-subtitle";
+        subtitle.textContent = temasInfo[tema].descripcion;
+
+        const cardsWrapper = document.createElement("div");
+        cardsWrapper.className = "cards collapsed";
+        cardsWrapper.dataset.tema = tema;
+
+        lista.forEach(n => {
+          const yaApadrinado = apadrinados.has(n.id);
+          if (filtro === "disponibles" && yaApadrinado) return;
+          if (filtro === "apadrinados" && !yaApadrinado) return;
+          cardsWrapper.appendChild(crearTarjeta(n));
+        });
+
+        if (!cardsWrapper.children.length) {
+          // Si por el filtro no hay nadie, no mostramos la sección
+          return;
+        }
+
+        const footer = document.createElement("div");
+        footer.className = "theme-footer";
+        const btnMore = document.createElement("button");
+        btnMore.className = "btn-more";
+        btnMore.type = "button";
+        btnMore.innerHTML = `Ver más de este grupo ▾`;
+        btnMore.addEventListener("click", () => toggleSeccion(section));
+        footer.appendChild(btnMore);
+
+        section.appendChild(header);
+        section.appendChild(subtitle);
+        section.appendChild(cardsWrapper);
+        section.appendChild(footer);
+
+        themesContainer.appendChild(section);
+      });
+
+      actualizarContador();
+    }
+
+    function toggleSeccion(section) {
+      const cardsWrapper = section.querySelector(".cards");
+      const btnToggle = section.querySelector(".theme-toggle");
+      const btnMore = section.querySelector(".btn-more");
+
+      const isCollapsed = cardsWrapper.classList.contains("collapsed");
+      if (isCollapsed) {
+        cardsWrapper.classList.remove("collapsed");
+        if (btnToggle) btnToggle.textContent = "Ver menos";
+        if (btnMore) btnMore.innerHTML = `Ver menos ▴`;
+      } else {
+        cardsWrapper.classList.add("collapsed");
+        if (btnToggle) btnToggle.textContent = "Ver más";
+        if (btnMore) btnMore.innerHTML = `Ver más de este grupo ▾`;
+      }
+    }
+
+    // ==============================
+    // 5. INTERACCIÓN: APADRINAR
+    // ==============================
+    function confirmarApadrinar(nino) {
+      const mensaje =
+        `¿Quieres apadrinar a ${nino.nombre} (${edadTexto(nino.edad)})?\n\n` +
+        `Este año sueña con: ${nino.peticion}.\n\n` +
+        `Al confirmar, te comprometes a buscar este regalo para la Noche de Reyes.\n` +
+        `Por favor, avisa a la persona encargada para registrar tu apadrinamiento.`;
+
+      if (!window.confirm(mensaje)) return;
+
+      apadrinados.add(nino.id);
+      guardarApadrinados();
+      render();
+    }
+
+    // ==============================
+    // 6. REINICIAR
+    // ==============================
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      const ok = window.confirm(
+        "Esto marcará a todas las niñas y niños como disponibles para apadrinar otra vez en este dispositivo.\n\n¿Seguro que quieres reiniciar?"
+      );
+      if (!ok) return;
+      apadrinados.clear();
+      guardarApadrinados();
+      render();
+    });
+
+    filterSelect.addEventListener("change", render);
+
+    // ==============================
+    // 7. INICIO
+    // ==============================
+    cargarApadrinados();
+    render();
+  </script>
+</body>
+</html>
